@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Jelajah Perang Padri — game edukasi 2D tentang perjalanan sejarah Minangkabau 1821-1837." />
+  <title>Jelajah Perang Padri — Menelusuri Perjalanan Sejarah Minangkabau</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <noscript>
+    <p style="padding:20px;font-family:sans-serif">Game ini membutuhkan JavaScript. Aktifkan JavaScript lalu muat ulang halaman.</p>
+  </noscript>
+
+  <div id="app">
+    <!-- ================= HOME SCREEN ================= -->
+    <section id="screen-home" class="screen screen--home is-active" aria-label="Layar utama">
+      <div class="home__scene" id="home-scene" aria-hidden="true"></div>
+      <div class="home__veil" aria-hidden="true"></div>
+
+      <div class="home__content">
+        <div class="hero">
+          <div class="hero__awning" aria-hidden="true"><span></span></div>
+          <p class="home__eyebrow">GAME EDUKASI SEJARAH &bull; MINANGKABAU</p>
+          <h1 class="home__title">
+            <span class="home__title-top">JELAJAH</span>
+            <span class="home__title-main">PERANG PADRI</span>
+          </h1>
+          <p class="home__sub">&ldquo;Menelusuri Perjalanan Sejarah Minangkabau&rdquo;</p>
+          <div class="hero__chips">
+            <span class="chip-static"><img class="ico" src="assets/icons/map.png" alt="">6 Lokasi</span>
+            <span class="chip-static"><img class="ico" src="assets/icons/scroll.png" alt="">6 Fakta</span>
+            <span class="chip-static"><img class="ico" src="assets/icons/star.png" alt="">Skor 6</span>
+          </div>
+        </div>
+
+          <div class="home__buttons">
+            <button type="button" class="btn btn--primary btn--big" id="btn-start"><img class="ico" src="assets/icons/flag.png" alt="">MULAI PERJALANAN</button>
+            <div class="home__grid">
+              <button type="button" class="btn" id="btn-howto"><img class="ico" src="assets/icons/book.png" alt="">CARA BERMAIN</button>
+              <button type="button" class="btn" id="btn-tokoh"><img class="ico" src="assets/icons/people.png" alt="">TOKOH</button>
+              <button type="button" class="btn" id="btn-fakta-home"><img class="ico" src="assets/icons/scroll.png" alt="">FAKTA SEJARAH</button>
+              <button type="button" class="btn" id="btn-sound-home"><img class="ico" src="assets/icons/sound.png" alt="">SOUND ON/OFF</button>
+            </div>
+          </div>
+
+        <p class="home__foot">1821 &ndash; 1837 &bull; Presentasi Sekolah Kelas XI</p>
+      </div>
+    </section>
+
+    <!-- ================= GAME SHELL ================= -->
+    <div class="shell" id="shell" hidden>
+      <header class="hud">
+        <div class="hud__awning" aria-hidden="true"></div>
+        <div class="hud__brand"><span class="hud__logo"><img class="ico" src="assets/icons/gunung.png" alt=""></span><span>JELAJAH PERANG PADRI</span></div>
+        <div class="hud__level" id="hud-level">PROLOG</div>
+        <div class="hud__stats">
+          <span class="pill pill--score"><img class="ico" src="assets/icons/star.png" alt="">SCORE <b id="hud-score">0</b>/6</span>
+          <span class="pill"><img class="ico" src="assets/icons/flag.png" alt="">PROGRES <b id="hud-progress">0</b>/6</span>
+          <span class="meter" aria-hidden="true"><i class="meter__fill" id="hud-meter"></i></span>
+        </div>
+        <div class="hud__actions">
+          <button type="button" class="btn btn--ghost" id="btn-open-map"><img class="ico" src="assets/icons/map.png" alt="">PETA</button>
+          <button type="button" class="btn btn--ghost" id="btn-sound" aria-pressed="true"><img class="ico" src="assets/icons/sound.png" alt="">SOUND</button>
+        </div>
+      </header>
+
+      <!-- ============ GAME SCREEN ============ -->
+      <section id="screen-game" class="screen screen--game" aria-label="Area permainan">
+        <div class="stage" id="stage">
+          <div class="stage__visual" id="stage-visual"></div>
+          <div class="stage__place" id="stage-place"></div>
+          <div class="stage__title" id="stage-title"></div>
+          <div class="stage__cast" id="stage-cast"></div>
+
+          <div class="stage__player" id="stage-player" style="left:26%">
+            <img class="char__sprite" src="assets/characters/pemain.png" alt="">
+            <span class="char__name is-you">PEMAIN</span>
+          </div>
+
+          <div class="stage__dpad" id="stage-dpad" aria-label="Kontrol berjalan">
+            <button type="button" class="dpad" data-move="-1" aria-label="Bergerak ke kiri">&#9664;</button>
+            <button type="button" class="dpad dpad--talk" id="btn-talk" aria-label="Bicara dengan tokoh">
+              <img src="assets/icons/talk.png" alt="">
+            </button>
+            <button type="button" class="dpad" data-move="1" aria-label="Bergerak ke kanan">&#9654;</button>
+          </div>
+
+          <div class="stage__toast" id="stage-toast" role="status" hidden></div>
+          <div class="stage__dark" id="stage-dark" aria-hidden="true"></div>
+          <span class="stage__corner tl" aria-hidden="true"></span>
+          <span class="stage__corner br" aria-hidden="true"></span>
+        </div>
+
+        <div class="dialog" id="dialog">
+          <div class="dialog__awning" aria-hidden="true"></div>
+          <div class="dialog__head" id="dialog-head">
+            <div class="avatar t-narator" id="dialog-avatar" aria-hidden="true"></div>
+            <div class="speaker" id="dialog-speaker">NARATOR</div>
+            <span class="dialog__tag" id="dialog-tag">DIALOG</span>
+          </div>
+
+          <div class="bubble" id="dialog-bubble">
+            <p id="dialog-text" aria-live="polite"></p>
+          </div>
+
+          <div class="bigcard" id="card-slot" hidden></div>
+
+          <div class="choices" id="choices" role="group" aria-label="Pilihan jawaban" hidden></div>
+
+          <div class="feedback" id="feedback" hidden aria-live="polite"></div>
+
+          <div class="dialog__foot">
+            <span class="hint" id="dialog-hint"></span>
+            <button type="button" class="btn btn--primary" id="btn-next">LANJUT &#8594;</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MAP SCREEN ============ -->
+      <section id="screen-map" class="screen screen--map" aria-label="Peta persebaran dan perjalanan">
+        <div class="board">
+          <div class="board__bar">
+            <div class="board__title"><span class="board__ico"><img class="ico" src="assets/icons/map.png" alt=""></span> PETA PERSEBARAN &amp; PERJALANAN</div>
+            <div class="board__chips" id="layer-chips">
+              <button type="button" class="chip chip--belanda is-on" data-layer="belanda" aria-pressed="true">
+                <i class="dot"></i><img class="ico" src="assets/icons/anchor.png" alt="">Penyebaran Belanda
+              </button>
+              <button type="button" class="chip chip--nusantara is-on" data-layer="nusantara" aria-pressed="true">
+                <i class="dot"></i><img class="ico" src="assets/icons/home.png" alt="">Masyarakat Nusantara
+              </button>
+              <button type="button" class="chip chip--arah is-on" data-layer="arah" aria-pressed="true">
+                <i class="dot"></i><img class="ico" src="assets/icons/compass.png" alt="">Arah Indonesia
+              </button>
+            </div>
+          </div>
+
+          <div class="board__body">
+            <div class="canvas" id="map-canvas"></div>
+
+            <aside class="side">
+              <div class="side__head">
+                <div class="ring" id="ring">
+                  <svg viewBox="0 0 80 80" aria-hidden="true">
+                    <circle class="ring__bg" cx="40" cy="40" r="32"></circle>
+                    <circle class="ring__fg" id="ring-fg" cx="40" cy="40" r="32"></circle>
+                  </svg>
+                  <span class="ring__val" id="ring-val">0%</span>
+                </div>
+                <div class="side__meta">
+                  <div class="side__t">TITIK PERJALANAN</div>
+                  <div class="side__s" id="map-sub">Klik lokasi yang terbuka untuk melanjutkan.</div>
+                </div>
+              </div>
+
+              <div class="side__list" id="map-path"></div>
+
+              <div class="side__foot">
+                <button type="button" class="btn" id="btn-map-back" hidden><img class="ico" src="assets/icons/back.png" alt="">KEMBALI KE PERMAINAN</button>
+              </div>
+            </aside>
+          </div>
+
+          <div class="board__foot">
+            <span class="legend"><i class="dot dot--belanda"></i> Jalur &amp; pelabuhan Belanda</span>
+            <span class="legend"><i class="dot dot--nusantara"></i> Kerajaan / masyarakat asli</span>
+            <span class="legend"><i class="dot dot--arah"></i> Arah menuju Indonesia</span>
+            <span class="note">Peta bergaya, bukan skala akurat.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FINAL SCREEN ============ -->
+      <section id="screen-final" class="screen screen--final" aria-label="Hasil akhir">
+        <div id="final-content"></div>
+      </section>
+    </div>
+
+    <!-- ================= OVERLAY / MODAL ================= -->
+    <div class="overlay" id="overlay" hidden>
+      <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Informasi"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
